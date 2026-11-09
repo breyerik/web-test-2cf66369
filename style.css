@@ -24,7 +24,7 @@ mark.platzhalter{background:#fff3b0;color:#6b4e00;border:1px dashed #c79a00;padd
 .sec-label{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--braun)}
 .sec-label::before{content:'';width:20px;height:1px;background:var(--braun)}
 .sec-title{font-family:var(--font-kopf);font-size:clamp(34px,3.7vw,52px);font-weight:300;line-height:1.15;margin-bottom:32px;white-space:pre-line}
-.sec-title em{font-style:italic}
+.sec-title em{font-style:normal;font-weight:500}
 .btn{display:inline-flex;align-items:center;gap:35px;background:var(--braun);color:#fff;padding:14px 23px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;border-radius:var(--radius)}
 .btn-abstand{margin-top:30px}
 .textlink{display:inline-block;font-size:12px;letter-spacing:.06em;border-bottom:1px solid var(--braun);padding-bottom:5px}
@@ -66,7 +66,7 @@ mark.platzhalter{background:#fff3b0;color:#6b4e00;border:1px dashed #c79a00;padd
 .hero-tag{display:flex;align-items:center;gap:10px;margin-bottom:16px;font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--braun-dunkel-hell)}
 .hero-tag::before{content:'';width:24px;height:1px;background:currentColor}
 .hero h1{font-family:var(--font-kopf);font-size:clamp(48px,5.5vw,80px);font-weight:300;line-height:1.1;color:#fff;margin-bottom:16px}
-.hero h1 em{font-style:italic;color:var(--braun-dunkel-hell)}
+.hero h1 em{font-style:normal;font-weight:500;color:var(--braun-dunkel-hell)}
 .hero-content p{font-size:15px;color:rgba(255,255,255,.8);line-height:1.75;margin-bottom:32px;max-width:440px}
 .hero-stats{display:inline-flex;border:1px solid rgba(255,255,255,.2);border-radius:8px;overflow:hidden;backdrop-filter:blur(4px)}
 .hero-stat{padding:13px 22px;border-right:1px solid rgba(255,255,255,.2)}
@@ -160,3 +160,49 @@ footer{display:flex;justify-content:space-between;align-items:center;gap:20px;pa
   .plan-card img{height:280px}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.home-slide{transition:none}}
+
+/* Klare, aufrechte Ziffern und ruhige moderne Überschriften. */
+.sec-title,.hero h1,.contact-name{font-weight:400;letter-spacing:-.025em}
+.event-date,.hero-stat-n,.data-table{font-variant-numeric:lining-nums tabular-nums}
+.event-date,.hero-stat-n{font-weight:400}
+h1,h2,h3{font-variant-numeric:lining-nums}
+
+/* Referenzen: großzügige Bilder neben kurzen Projektbeschreibungen. */
+#referenzen-intro{padding-bottom:44px;min-height:0}
+section[id^="referenz-"] .project-preview{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(28px,6vw,88px)}
+section[id^="referenz-"] img{aspect-ratio:4/3;object-fit:cover}
+section[id^="referenz-"] .sec-title{margin-bottom:22px}
+@media(max-width:860px){section[id^="referenz-"] .project-preview{grid-template-columns:1fr;gap:28px}}
+
+/* Titelbild Wilsdorfallee vollständig zeigen. */
+#referenz-5 img{aspect-ratio:auto;height:auto}
+
+/* Titelbild Saselwisch vollständig zeigen. */
+#referenz-4 img{aspect-ratio:auto;height:auto}
+
+/* Neue Referenz-Titelbilder ohne Beschnitt. */
+#referenz-2 img,#gingsterbusch img{aspect-ratio:auto;height:auto}
+
+/* Titelbild Bilenbarg vollständig zeigen. */
+#referenz-1 img{aspect-ratio:auto;height:auto}
+
+/* Titelbild Herzog-Alf-Weg vollständig zeigen. */
+#referenz-3 img{aspect-ratio:auto;height:auto}
+
+/* Aufklappbare Zusatzinformationen pro Referenz. */
+.project-details{margin-top:26px;border:1px solid var(--gray-200);border-radius:var(--radius)}
+.project-details summary{cursor:pointer;padding:13px 18px;color:var(--braun);font-size:13px;font-weight:500;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.project-details summary::-webkit-details-marker{display:none}
+.project-details summary::after{content:'+';font-size:21px;font-weight:300}
+.project-details[open] summary::after{content:'−'}
+.project-details summary:hover{background:var(--braun-light)}
+.project-details summary:focus-visible{outline:2px solid var(--braun);outline-offset:3px}
+.project-details-content{padding:4px 18px 18px}
+.project-details-content p:last-child{margin-bottom:0}
+.project-details-gallery{display:grid;gap:14px}
+.project-details-gallery:empty{display:none}
+.project-details-gallery img{width:100%;height:auto;aspect-ratio:auto!important}
+#gingsterbusch .project-preview{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(28px,6vw,88px)}
+@media(max-width:860px){#gingsterbusch .project-preview{grid-template-columns:1fr;gap:28px}}
+
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}

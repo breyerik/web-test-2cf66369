@@ -212,3 +212,72 @@ section[id^="referenz-"] .sec-title{margin-bottom:22px}
 
 .rd-glass p,.rd-glass .sec-label{color:rgba(255,255,255,.92)}
 .rd-glass h1,.rd-glass p,.rd-glass span,.rd-glass .sec-label{text-shadow:0 1px 8px rgba(0,0,0,.5)}
+
+/* Einheitliche Projektunterlagen und klar getrennter Projektausblick. */
+#grundrisse .plans-grid{max-width:none;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+#grundrisse .plan-card{margin:0}
+#grundrisse .plan-card img{width:100%;height:280px;object-fit:contain;background:white}
+.expose-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:32px;margin-top:32px;padding:32px;border:1px solid var(--gray-200);border-radius:12px;background:rgba(255,255,255,.65)}
+.expose-row h3{font-size:24px;font-weight:500;margin:0 0 12px}
+.expose-row p{font-size:14px;line-height:1.7;color:var(--gray-600);margin:0}
+.expose-row .download{min-width:220px;padding:20px 24px;border-radius:8px}
+#waehlingsweg{border-top:1px solid var(--gray-200)}
+#waehlingsweg .project-preview img{aspect-ratio:3/2;object-fit:cover;display:block}
+@media(max-width:860px){#grundrisse .plans-grid{grid-template-columns:1fr;max-width:600px}.expose-row{grid-template-columns:1fr;padding:24px;gap:20px}.expose-row .download{min-width:0}#grundrisse .plan-card img{height:auto;max-height:420px}}
+
+/* Bildstarker Einstieg mit dauerhaft sichtbarem aktuellem Angebot. */
+.home-slideshow{height:calc(100svh - 96px);min-height:660px;max-height:1000px;background:#252924}
+.home-slide{margin:0;transition:opacity 1.6s ease}
+.home-slide img{object-fit:cover;transform:scale(1.035);transition:transform 8s linear;width:100%;height:100%}
+.home-slide picture{display:block;width:100%;height:100%}
+.home-slide.active img{transform:scale(1.11)}
+.home-shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,#101913ab,transparent 95%),linear-gradient(0deg,#101913b3,transparent 65%)}
+.home-message{position:absolute;top:15%;left:7%;right:7%;color:white;max-width:840px}
+.home-message>span{font-size:11px;text-transform:uppercase;letter-spacing:.22em}
+.home-message h1{font-family:var(--font-kopf);font-size:clamp(40px,5.3vw,78px);font-weight:400;letter-spacing:-.045em;line-height:1.08;margin:24px 0}
+.home-message p{font-size:16px;line-height:1.6;color:#ffffffe0;margin-bottom:28px}
+.home-primary{display:inline-block;padding:16px 24px;background:#fff;color:#262922;border-radius:6px;font-size:13px;font-weight:500}
+.home-primary:hover{background:#eee7dd}
+.home-offer{position:absolute;right:7%;bottom:95px;width:350px;max-width:86%;padding:25px 28px;color:white;background:#19221e55;border:1px solid #ffffff55;border-radius:16px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.home-offer>span{font-size:10px;letter-spacing:.09em;text-transform:uppercase}.home-offer strong{display:block;font-size:24px;font-weight:500;margin:12px 0}.home-offer p{font-size:13px;line-height:1.7;margin:0 0 16px}.home-offer b{font-size:12px;font-weight:500}
+.home-slide figcaption{z-index:1;left:7%;bottom:35px;font-size:10px;max-width:45%;background:transparent;padding:0}
+.slide-controls{right:7%;bottom:25px;border:1px solid #ffffff40;border-radius:30px;backdrop-filter:blur(10px);z-index:3}
+.home-slideshow.is-paused .home-slide img{transition:none}
+.home-slideshow a:focus-visible,.slide-controls button:focus-visible{outline:3px solid white;outline-offset:5px}
+@media(max-width:700px){.home-slideshow{aspect-ratio:auto;height:850px;min-height:0;max-height:none}.home-message{top:65px;left:6%;right:6%}.home-message h1{font-size:42px}.home-message p{font-size:14px;max-width:300px}.home-offer{left:6%;right:6%;bottom:135px;width:auto;max-width:none;padding:22px}.home-slide figcaption{left:6%;bottom:100px;top:auto;max-width:88%;font-size:9px}.slide-controls{left:6%;right:6%;bottom:25px}.home-primary{font-size:12px;padding:16px 18px}}
+@media(prefers-reduced-motion:reduce){.home-slide,.home-slide img{transition:none!important;transform:none!important}}
+
+/* Reiner Bildauftakt; Vermarktung im eigenen Projektbereich darunter. */
+.home-images-only{height:min(80svh,900px);min-height:420px}
+.home-images-only .home-slide figcaption{display:none}
+.home-images-only .home-slide{transition:opacity .85s ease}
+.home-images-only .home-slide img{transition:transform 4.5s linear}
+@media(max-width:700px){.home-images-only{height:62svh;min-height:360px;max-height:650px}}
+/* Kompakter Bildauftakt mit vollständig sichtbaren Häusern. */
+.home-images-only{height:clamp(320px,56svh,620px);min-height:0;margin-bottom:36px;background:#f5f3ef}
+.home-images-only .home-slide img{object-fit:contain;transform:scale(.97)}
+.home-images-only .home-slide.active img{transform:scale(1)}
+@media(max-width:700px){.home-images-only{height:auto;aspect-ratio:3/2;min-height:0;max-height:none;margin-bottom:24px}.home-images-only .slide-controls{bottom:10px;padding:0 6px}.home-images-only .slide-controls button{height:30px}}
+@media(prefers-reduced-motion:reduce){.home-images-only .home-slide img{transform:none!important}}
+
+/* Großzügiger Auftakt, klare Trennung, ein einziger Angebotsbereich. */
+.home-images-only{height:clamp(520px,80svh,940px);margin:0 0 48px;background:#f5f3ef}
+.home-images-only .home-slide img{object-fit:contain;transform:scale(.99)}
+.home-images-only .home-slide.active img{transform:scale(1)}
+#besichtigung.home-slideshow{height:clamp(500px,70svh,760px);min-height:0}
+#besichtigung .home-message{top:auto;bottom:15%}
+#besichtigung .home-slide img{transform:none}
+#besichtigung .home-slide figcaption{display:none}
+@media(max-width:700px){.home-images-only{height:64svh;min-height:400px;max-height:650px;aspect-ratio:auto;margin-bottom:32px}.home-images-only .home-slide img{object-fit:cover}#besichtigung.home-slideshow{height:560px}#besichtigung .home-message{bottom:65px}}
+
+/* Ausgewogene Bildflächen und integrierte Besichtigungsanfrage. */
+.home-images-only{height:clamp(480px,72svh,800px);margin-bottom:40px}
+#besichtigung.home-slideshow{height:clamp(540px,72svh,800px)}
+#besichtigung .home-message{bottom:10%;max-width:850px}
+#besichtigung .home-message h1{font-size:clamp(40px,4.6vw,66px)}
+.home-visit{display:flex;align-items:center;gap:28px;flex-wrap:wrap;margin-top:28px;padding-top:22px;border-top:1px solid #ffffff55}
+.home-visit strong{display:block;font-size:20px;font-weight:500}
+.home-visit span{display:block;font-size:13px;margin-top:7px;color:#ffffffe0}
+.home-visit a{display:inline-block;border:1px solid #ffffff88;background:#ffffff15;padding:13px 18px;border-radius:6px;font-size:13px;backdrop-filter:blur(6px)}
+.home-visit a:hover{background:#ffffff30}
+@media(max-width:700px){.home-images-only{height:58svh;min-height:360px;max-height:560px;margin-bottom:28px}#besichtigung.home-slideshow{height:650px}#besichtigung .home-message{bottom:45px}#besichtigung .home-message h1{font-size:38px}.home-visit{gap:16px;margin-top:22px;padding-top:20px}.home-visit strong{font-size:18px}}

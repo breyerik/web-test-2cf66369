@@ -15,7 +15,7 @@
   let index = 0, paused = reduced.matches, timer = null;
   function show(n) { index = (n + slides.length) % slides.length; slides.forEach((s, i) => { s.classList.toggle('active', i === index); s.setAttribute('aria-hidden', String(i !== index)); }); dots.forEach((d, i) => d.setAttribute('aria-pressed', String(i === index))); }
   function schedule() { clearInterval(timer); if (!paused && !document.hidden) timer = setInterval(() => show(index + 1), ms); }
-  function sync() { pause.textContent = paused ? '▶' : 'Ⅱ'; pause.setAttribute('aria-label', paused ? 'Slideshow abspielen' : 'Slideshow pausieren'); schedule(); }
+  function sync() { box.classList.toggle('is-paused', paused); pause.textContent = paused ? '▶' : 'Ⅱ'; pause.setAttribute('aria-label', paused ? 'Slideshow abspielen' : 'Slideshow pausieren'); schedule(); }
   function manual(n) { show(n); paused = true; sync(); }
   box.querySelector('[data-prev]').addEventListener('click', () => manual(index - 1));
   box.querySelector('[data-next]').addEventListener('click', () => manual(index + 1));

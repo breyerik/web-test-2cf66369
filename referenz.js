@@ -21,7 +21,7 @@ document.querySelectorAll('.reference-detail, .galerie-block').forEach((root) =>
     img.src = b.dataset.full;
     img.alt = vorschau ? vorschau.alt : '';
     const unterschrift = b.closest('figure')?.querySelector('figcaption');
-    text.textContent = unterschrift && b.closest('.galerie-block') ? unterschrift.textContent : (vorschau ? vorschau.alt : '');
+    text.textContent = b.closest('.showroom') ? '' : unterschrift && b.closest('.galerie-block') ? unterschrift.textContent : (vorschau ? vorschau.alt : '');
     zaehler.textContent = `${current + 1} / ${buttons.length}`;
     vorladen(current + 1);
     vorladen(current - 1);

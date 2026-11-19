@@ -183,4 +183,88 @@
       io.observe(el);
     });
   }
+
+  // ---------- Showroom-Schieber: Skizze → Entwurf → Rendering ----------
+  document.querySelectorAll('.schieber').forEach((root) => {
+    const regler = root.querySelector('.schieber-regler');
+    const flaeche = root.querySelector('.schieber-bild');
+    const ebenen = [...root.querySelectorAll('.schieber-ebene')];
+    const marken = [...root.querySelectorAll('.schieber-marken button')];
+    const max = Number(root.dataset.max) || 200;
+    let animiert = null;
+    const setze = (v) => {
+      v = Math.max(0, Math.min(max, v));
+      regler.value = v;
+      ebenen.forEach((e, i) => { if (i > 0) e.style.opacity = Math.max(0, Math.min(1, (v - (i - 1) * 100) / 100)); });
+      const stufe = Math.round(v / 100);
+      marken.forEach((m, i) => (i === stufe ? m.setAttribute('aria-current', 'true') : m.removeAttribute('aria-current')));
+      regler.setAttribute('aria-valuetext', marken[stufe] ? marken[stufe].textContent : '');
+      root.style.setProperty('--pos', `${(v / max) * 100}%`);
+      regler.style.setProperty('--pos', `${(v / max) * 100}%`);
+    };
+    const stoppe = () => { if (animiert) { cancelAnimationFrame(animiert); animiert = null; } };
+    const gleite = (ziel, dauer = 900) => {
+      stoppe();
+      const start = Number(regler.value); const t0 = performance.now();
+      if (reduziert.matches) { setze(ziel); return; }
+      const schritt = (t) => {
+        const p = Math.min(1, (t - t0) / dauer); const e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+        setze(start + (ziel - start) * e);
+        if (p < 1) animiert = requestAnimationFrame(schritt); else animiert = null;
+      };
+      animiert = requestAnimationFrame(schritt);
+    };
+    regler.addEventListener('input', () => { stoppe(); setze(Number(regler.value)); });
+    marken.forEach((m) => m.addEventListener('click', () => gleite(Number(m.dataset.wert))));
+    // Ziehen direkt auf dem Bild
+    let ziehen = false;
+    const ausZeiger = (e) => { const r = flaeche.getBoundingClientRect(); setze(((e.clientX - r.left) / r.width) * max); };
+    flaeche.addEventListener('pointerdown', (e) => { stoppe(); ziehen = true; flaeche.setPointerCapture(e.pointerId); ausZeiger(e); });
+    flaeche.addEventListener('pointermove', (e) => { if (ziehen) ausZeiger(e); });
+    ['pointerup', 'pointercancel'].forEach((t) => flaeche.addEventListener(t, () => { ziehen = false; }));
+    setze(0);
+    // Einmaliger Vorführ-Durchlauf, sobald der Schieber sichtbar ist
+    if (!reduziert.matches && 'IntersectionObserver' in window) {
+      let gezeigt = false;
+      const io = new IntersectionObserver((e) => {
+        if (gezeigt || !e[0].isIntersecting) return;
+        gezeigt = true; io.disconnect();
+        setTimeout(() => { if (Number(regler.value) === 0) gleite(max, 3200); }, 600);
+      }, { threshold: 0.5 });
+      io.observe(flaeche);
+    }
+  });
+
+  // ---------- Geschoss-Reiter (Grundrisse) ----------
+  document.querySelectorAll('.gr-wechsel').forEach((root) => {
+    const tabs = [...root.querySelectorAll('.gr-tab')];
+    const panels = tabs.map((t) => document.getElementById(t.getAttribute('aria-controls')));
+    const pin = root.querySelector('.gr-pin');
+    let aktiv = -1;
+    const nr = (t) => Number(t.id.split('-t').pop());
+    const waehle = (i, fokus) => {
+      if (i === aktiv) return;
+      const alt = aktiv; aktiv = i;
+      tabs.forEach((t, j) => { const an = i === j; t.setAttribute('aria-selected', an); t.tabIndex = an ? 0 : -1; });
+      panels.forEach((p, j) => {
+        if (j === i) { p.classList.remove('weg'); p.hidden = false; }
+        else if (j === alt) { p.classList.add('weg'); setTimeout(() => { if (aktiv !== j) { p.hidden = true; p.classList.remove('weg'); } }, reduziert.matches ? 0 : 1100); }
+        else p.hidden = true;
+      });
+      root.querySelectorAll('.gr-zone').forEach((z) => z.classList.toggle('an', Number(z.dataset.i) === nr(tabs[i])));
+      if (pin && tabs[i].dataset.mitte) pin.style.setProperty('--y', `${tabs[i].dataset.mitte}%`);
+      if (fokus) tabs[i].focus();
+    };
+    root.querySelectorAll('.gr-zone').forEach((z) => z.addEventListener('click', () => {
+      const k = tabs.findIndex((t) => nr(t) === Number(z.dataset.i)); if (k > -1) waehle(k);
+    }));
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => waehle(i));
+      t.addEventListener('keydown', (e) => {
+        const n = { ArrowRight: i + 1, ArrowDown: i + 1, ArrowLeft: i - 1, ArrowUp: i - 1, Home: 0, End: tabs.length - 1 }[e.key];
+        if (n === undefined) return; e.preventDefault(); waehle((n + tabs.length) % tabs.length, true);
+      });
+    });
+    waehle(Math.max(0, tabs.findIndex((t) => t.getAttribute('aria-selected') === 'true')));
+  });
 })();

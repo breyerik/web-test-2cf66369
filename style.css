@@ -655,7 +655,7 @@ main:has(> .leitsatz:last-child) + .fuss{border-top:1px solid rgba(255,255,255,.
 @media (max-width:860px){.showroom-kopf{grid-template-columns:minmax(0,1fr);gap:16px}.showroom-raster{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:520px){.showroom-raster{grid-template-columns:minmax(0,1fr)}}
 .sr-editorial{grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(12px,1.6vw,24px)}
-.sr-editorial .sr-foto:nth-child(4n+1),.sr-editorial .sr-foto:nth-child(4n+4){grid-column:1/-1}
+
 .sr-ki{margin-top:16px;font-size:var(--fs-xs);color:var(--gray-600);letter-spacing:.02em}
 @keyframes grEin{from{opacity:0}to{opacity:1}}
 @media (prefers-reduced-motion:reduce){.gr-panel{animation:none}}
@@ -717,3 +717,151 @@ main:has(> .leitsatz:last-child) + .fuss{border-top:1px solid rgba(255,255,255,.
 @media (prefers-reduced-motion:reduce){.gr-plan,.gr-plan-bild img,.gr-zone,.gr-pin,.gr-tab::after{transition:none}.gr-pin::before{animation:none}}
 @media (max-width:900px){.gr-wechsel{grid-template-columns:minmax(0,1fr)}.gr-seite{position:static}.gr-leiste .gr-lupe{display:none}}
 .gr-panel.weg .gr-leiste{opacity:0;transition:opacity .2s}
+
+/* Wohnungswahl (Wählingsweg) */
+.ww-wahl{position:relative;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(32px,4.5vw,72px);align-items:start}
+.ww-haus{position:relative;border-radius:var(--radius);overflow:hidden;box-shadow:0 50px 90px -40px rgba(0,0,0,.8);background:#0d1424}
+.ww-basis img,.ww-licht img{display:block;width:100%;height:auto}
+.ww-licht{position:absolute;inset:0;opacity:0;transition:opacity 1.1s ease;pointer-events:none}
+.ww-licht.an{opacity:1}
+.ww-zonen{position:absolute;inset:0;width:100%;height:100%}
+.ww-zone{fill:rgba(255,214,150,0);stroke:rgba(255,226,180,0);stroke-width:1;vector-effect:non-scaling-stroke;cursor:pointer;transition:fill .4s,stroke .4s}
+.ww-zone:hover{fill:rgba(255,214,150,.10);stroke:rgba(255,226,180,.55);stroke-dasharray:4 4}
+.ww-zone.an{fill:rgba(255,214,150,0);stroke:rgba(255,226,180,0)}
+.ww-haus .ki-hinweis{z-index:3}
+.ww-liste{margin-top:clamp(20px,2.6vw,32px);display:flex;flex-direction:column}
+.ww-reihe{display:grid;grid-template-columns:130px minmax(0,1fr);align-items:center;gap:16px;padding:12px 0;border-top:1px solid rgba(243,238,232,.12)}
+.ww-reihe:last-child{border-bottom:1px solid rgba(243,238,232,.12)}
+.ww-geschoss{font-size:var(--fs-xs);letter-spacing:.14em;text-transform:uppercase;color:#A39A91}
+.ww-knoepfe{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ww-we{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:12px 16px;border:1px solid rgba(243,238,232,.16);border-radius:var(--radius);background:transparent;font:inherit;text-align:left;color:#F3EEE8;cursor:pointer;transition:border-color .35s,background .35s,box-shadow .5s}
+.ww-we-name{font-size:1.05rem;font-weight:400;letter-spacing:.02em}
+.ww-we-info{font-size:var(--fs-xs);letter-spacing:.06em;color:#A39A91;min-height:1em}
+.ww-we:hover{border-color:rgba(243,238,232,.45);background:rgba(243,238,232,.04)}
+.ww-we[aria-pressed="true"]{border-color:#E4CCB0;background:rgba(228,204,176,.08);box-shadow:0 0 30px -6px rgba(255,200,120,.35)}
+.ww-we[aria-pressed="true"] .ww-we-name{color:#fff}
+.ww-we:focus-visible{outline:2px solid #E4CCB0;outline-offset:3px}
+.ww-start-karte{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;aspect-ratio:3/2;border:1px dashed rgba(243,238,232,.22);border-radius:var(--radius);padding:32px}
+.ww-start-icon{width:42px;height:42px;border-radius:50%;background:radial-gradient(circle,rgba(255,214,150,.95) 0 30%,rgba(255,214,150,.25) 31% 60%,transparent 61%);animation:grPuls 2.4s ease-out infinite;margin-bottom:22px}
+.ww-start-titel{font-size:clamp(1.2rem,1.7vw,1.5rem);font-weight:300;color:#F7F2EC;margin:0 0 8px}
+.ww-start-text{font-size:var(--fs-xs);letter-spacing:.06em;color:#A39A91;margin:0;max-width:30ch}
+@media (prefers-reduced-motion:reduce){.ww-licht{transition:none}.ww-start-icon{animation:none}}
+@media (max-width:900px){.ww-wahl{grid-template-columns:minmax(0,1fr)}.ww-reihe{grid-template-columns:minmax(0,1fr);gap:8px}}
+
+/* Verlauf-Schieber im Projektteaser */
+.pp-schieber .schieber-klein{max-width:none;margin:0}
+.schieber-klein .schieber-steuer{margin-top:14px}
+.schieber-klein .schieber-marken button{font-size:.68rem}
+.pp-verlauf-text{margin-top:6px;font-size:var(--fs-xs);letter-spacing:.04em;color:var(--gray-600)}
+.schieber-klein .schieber-regler{width:calc(100% - 4px);margin:0 2px}
+@media (max-width:520px){.schieber-klein .schieber-marken button{font-size:.62rem;letter-spacing:.06em}}
+
+.ww-tabelle{width:100%;margin-top:clamp(20px,2.4vw,32px);border-collapse:collapse;font-size:.95rem;color:#E9E2DA;transition:opacity .6s .45s}
+.gr-panel[hidden] .ww-tabelle,.gr-panel.weg .ww-tabelle{opacity:0;transition:opacity .2s}
+.ww-tabelle caption{text-align:left}
+.ww-t-kopf{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding-bottom:12px;border-bottom:1px solid rgba(243,238,232,.5)}
+.ww-t-name{font-size:clamp(1.3rem,1.8vw,1.6rem);font-weight:300;color:#F7F2EC}
+.ww-t-unter{font-size:var(--fs-xs);letter-spacing:.14em;text-transform:uppercase;color:#A39A91;text-align:right}
+.ww-tabelle th,.ww-tabelle td{padding:8px 0;border-bottom:1px dotted rgba(243,238,232,.18);font-weight:300}
+.ww-tabelle th{text-align:left;color:#D6CEC5}
+.ww-tabelle td{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;padding-left:16px}
+.ww-summe th,.ww-summe td{padding-top:16px;border-top:1px solid rgba(243,238,232,.5);border-bottom:0;font-size:1.12rem;font-weight:500;color:#F7F2EC}
+.ww-zusatz th,.ww-zusatz td{border-bottom:0;color:#E4CCB0;font-size:.92rem}
+@media (prefers-reduced-motion:reduce){.ww-tabelle{transition:none}}
+.hero-bild.pp-schieber .schieber-ebene img{aspect-ratio:auto;height:100%;border-radius:0}
+.hero-bild.pp-schieber .schieber-bild .ki-hinweis{z-index:3}
+
+.ww-plaene{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ww-plan{margin:0}
+.ww-plan .gr-plan{padding:clamp(10px,1.4vw,20px)}
+.ww-plan figcaption{margin-top:8px;font-size:var(--fs-xs);letter-spacing:.14em;text-transform:uppercase;color:#A39A91}
+.ww-gruppe th{padding-top:18px;font-size:var(--fs-xs);letter-spacing:.14em;text-transform:uppercase;color:#E4CCB0;border-bottom:1px solid rgba(243,238,232,.18)}
+.ww-teilsumme th,.ww-teilsumme td{color:#F7F2EC;font-weight:400}
+.ww-plan .gr-plan{padding:6px}
+.ww-links{position:sticky;top:110px}
+@media (max-width:900px){.ww-links{position:static}}
+.plans-grid:has(> .plan-card:only-child){grid-template-columns:minmax(0,640px)}
+
+/* Galerie-Karussell */
+.gk-kopf{display:flex;justify-content:space-between;align-items:flex-end;gap:32px;flex-wrap:wrap;margin-bottom:clamp(24px,3vw,40px)}
+.gk-text{margin:12px 0 0;color:var(--gray-600);max-width:46ch}
+.gk-tabs{display:flex;gap:6px;padding:4px;border:1px solid var(--gray-200);border-radius:999px}
+.gk-tab{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border:0;border-radius:999px;background:transparent;font:inherit;font-size:var(--fs-xs);letter-spacing:.14em;text-transform:uppercase;color:var(--gray-600);cursor:pointer;transition:background .35s,color .35s}
+.gk-tab[aria-selected="true"]{background:var(--text);color:#fff}
+.gk-anzahl{font-size:.68rem;letter-spacing:.04em}
+.gk-tab:focus-visible{outline:2px solid var(--braun);outline-offset:3px}
+.gk-spur{display:flex;gap:clamp(10px,1.2vw,18px);overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:0 max(var(--rand),calc((100% - var(--wrap)) / 2));scroll-padding:0 max(var(--rand),calc((100% - var(--wrap)) / 2));outline:none}
+.gk-spur::-webkit-scrollbar{display:none}
+.gk-spur:focus-visible{outline:2px solid var(--braun);outline-offset:4px}
+.gk-bild{flex:0 0 auto;margin:0;scroll-snap-align:start}
+.gk-bild .rd-photo{display:block;height:clamp(300px,56vh,580px);border-radius:var(--radius);overflow:hidden;cursor:zoom-in}
+.gk-bild img{height:100%;width:auto;display:block;transition:transform 1.2s cubic-bezier(.16,1,.3,1)}
+.gk-bild .rd-photo:hover img{transform:scale(1.03)}
+.gk-bild figcaption{margin-top:12px;font-size:var(--fs-xs);letter-spacing:.14em;text-transform:uppercase;color:var(--gray-600)}
+.gk-panel[hidden]{display:none}
+.gk-panel:not([hidden]){animation:grEin .6s ease both}
+.gk-steuer{display:flex;align-items:center;gap:24px;margin-top:clamp(20px,2.4vw,32px)}
+.gk-fortschritt{flex:1;height:1px;background:var(--gray-200);position:relative}
+.gk-fortschritt span{position:absolute;left:0;top:0;bottom:0;width:8%;background:var(--braun);transition:width .4s ease}
+.gk-zaehler{font-size:var(--fs-xs);letter-spacing:.14em;color:var(--gray-600);font-variant-numeric:tabular-nums;min-width:5.5em;text-align:center}
+.gk-pfeile{display:flex;gap:8px}
+.gk-pfeile button{width:46px;height:46px;border:1px solid var(--gray-200);border-radius:50%;background:#fff;font:inherit;color:var(--text);cursor:pointer;transition:border-color .3s,background .3s,color .3s}
+.gk-pfeile button:hover{border-color:var(--braun);background:var(--braun);color:#fff}
+@media (max-width:700px){.gk-bild .rd-photo{height:min(64vh,420px)}.gk-tab{padding:9px 14px}}
+@media (prefers-reduced-motion:reduce){.gk-bild img,.gk-fortschritt span{transition:none}.gk-panel:not([hidden]){animation:none}}
+
+/* Wohnungswahl breit (VBW) */
+.ww-breit{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}
+.ww-breit .ww-links{position:static}
+.ww-breit .ww-start-karte{aspect-ratio:1/1}
+.ww-geschosse{display:inline-flex;gap:4px;padding:4px;border:1px solid rgba(243,238,232,.18);border-radius:999px;margin-bottom:14px}
+.ww-g-knopf{padding:8px 18px;border:0;border-radius:999px;background:transparent;font:inherit;font-size:var(--fs-xs);letter-spacing:.14em;text-transform:uppercase;color:#A39A91;cursor:pointer;transition:background .3s,color .3s}
+.ww-g-knopf[aria-pressed="true"]{background:#E4CCB0;color:#151210}
+.ww-g-knopf:focus-visible{outline:2px solid #E4CCB0;outline-offset:3px}
+.ww-g-plan[hidden]{display:none}
+.ww-g-plan:not([hidden]){animation:grEin .5s ease both}
+.ww-breit .gr-plan{padding:clamp(8px,1.2vw,16px)}
+.ww-flaechen-wrap{margin-top:clamp(36px,4vw,56px)}
+.ww-flaechen[hidden]{display:none}
+.ww-flaechen:not([hidden]){animation:grEin .6s ease both}
+.ww-f-kopf{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding-bottom:14px;border-bottom:1px solid rgba(243,238,232,.5)}
+.ww-f-spalten{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(24px,3.4vw,56px);align-items:start}
+.ww-f-tabelle{margin-top:18px}
+.ww-f-tabelle caption{text-align:left;padding:4px 0 8px;font-size:var(--fs-xs);letter-spacing:.14em;text-transform:uppercase;color:#E4CCB0;border-bottom:1px solid rgba(243,238,232,.18)}
+.ww-f-tabelle .ww-teilsumme th,.ww-f-tabelle .ww-teilsumme td{border-bottom:0;padding-top:12px}
+.ww-f-summe{display:flex;justify-content:space-between;align-items:baseline;margin-top:20px;padding-top:16px;border-top:1px solid rgba(243,238,232,.5);font-size:1.15rem;color:#F7F2EC}
+.ww-f-summe strong{font-weight:500}
+@media (max-width:900px){.ww-breit{grid-template-columns:minmax(0,1fr)}.ww-f-spalten{grid-template-columns:minmax(0,1fr);gap:0}}
+
+/* Lageplan & Exposé nebeneinander */
+#lageplan .wrap{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);grid-template-rows:auto auto 1fr;column-gap:clamp(32px,5vw,80px);align-items:start}
+#lageplan .plans-grid{grid-column:1;grid-row:1 / span 3;grid-template-columns:minmax(0,1fr)!important;margin:0}
+#lageplan .sec-label{grid-column:2;grid-row:1}
+#lageplan .sec-title{grid-column:2;grid-row:2}
+#lageplan .expose-row{grid-column:2;grid-row:3;margin:0;flex-direction:column;align-items:flex-start;gap:24px}
+@media (max-width:900px){#lageplan .wrap{grid-template-columns:minmax(0,1fr)}#lageplan .plans-grid,#lageplan .sec-label,#lageplan .sec-title,#lageplan .expose-row{grid-column:1;grid-row:auto}#lageplan .plans-grid{margin:24px 0}}
+.ww-breit .gr-plan-bild img{aspect-ratio:1/1;height:auto;object-fit:contain}
+#lageplan .expose-row{display:flex!important;flex-direction:column;align-items:flex-start;padding:clamp(28px,3vw,44px)}
+#lageplan .expose-row>div:first-child{max-width:none}
+#lageplan .expose-row h3{max-width:none}
+
+#lageplan .wrap{grid-template-rows:auto auto auto 1fr}
+#lageplan .plans-grid{grid-row:1 / span 4}
+#lageplan .lp-bild{grid-column:2;grid-row:1;margin:0 0 clamp(28px,3vw,40px)}
+#lageplan .lp-bild img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:var(--radius)}
+#lageplan .sec-label{grid-row:2}
+#lageplan .sec-title{grid-row:3}
+#lageplan .expose-row{grid-row:4}
+@media (max-width:900px){#lageplan .lp-bild{grid-row:auto}}
+.gk-spur .rd-photo[data-seite="l"]{cursor:w-resize}
+.gk-spur .rd-photo[data-seite="r"]{cursor:e-resize}
+/* Lageplan-Bereich: Plan links, Text rechts, Exposé darunter */
+#lageplan .wrap{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:1fr auto auto auto 1fr auto;column-gap:clamp(40px,6vw,96px)}
+#lageplan .plans-grid{grid-column:1;grid-row:1 / span 5}
+#lageplan .sec-label{grid-column:2;grid-row:2}
+#lageplan .sec-title{grid-column:2;grid-row:3}
+#lageplan .lp-text{grid-column:2;grid-row:4;color:var(--gray-600)}
+#lageplan .lp-text ul{margin:20px 0 0;padding:0;list-style:none;border-top:1px solid var(--gray-200)}
+#lageplan .lp-text li{padding:12px 0;border-bottom:1px solid var(--gray-200);color:var(--text)}
+#lageplan .expose-row{grid-column:1 / -1;grid-row:6;display:grid!important;grid-template-columns:minmax(0,1fr) auto;align-items:center;margin-top:clamp(32px,4vw,56px);padding:clamp(24px,3vw,40px)}
+@media (max-width:900px){#lageplan .wrap{grid-template-columns:minmax(0,1fr);grid-template-rows:none}#lageplan .sec-label,#lageplan .sec-title,#lageplan .lp-text,#lageplan .plans-grid,#lageplan .expose-row{grid-column:1;grid-row:auto}#lageplan .sec-label{order:1}#lageplan .sec-title{order:2}#lageplan .lp-text{order:3}#lageplan .plans-grid{order:4;margin:24px 0 0}#lageplan .expose-row{order:5;grid-template-columns:minmax(0,1fr)}}

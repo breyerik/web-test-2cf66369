@@ -195,8 +195,8 @@
     const setze = (v) => {
       v = Math.max(0, Math.min(max, v));
       regler.value = v;
-      ebenen.forEach((e, i) => { if (i > 0) e.style.opacity = Math.max(0, Math.min(1, (v - (i - 1) * 100) / 100)); });
-      const stufe = Math.round(v / 100);
+      ebenen.forEach((e, i) => { if (i > 0) { const von = e.dataset.von !== undefined ? Number(e.dataset.von) : (i - 1) * 100; const bis = e.dataset.bis !== undefined ? Number(e.dataset.bis) : i * 100; e.style.opacity = Math.max(0, Math.min(1, (v - von) / (bis - von))); } });
+      const stufe = marken.reduce((b, m, k) => (Math.abs(Number(m.dataset.wert) - v) < Math.abs(Number(marken[b].dataset.wert) - v) ? k : b), 0);
       marken.forEach((m, i) => (i === stufe ? m.setAttribute('aria-current', 'true') : m.removeAttribute('aria-current')));
       regler.setAttribute('aria-valuetext', marken[stufe] ? marken[stufe].textContent : '');
       root.style.setProperty('--pos', `${(v / max) * 100}%`);
@@ -266,5 +266,113 @@
       });
     });
     waehle(Math.max(0, tabs.findIndex((t) => t.getAttribute('aria-selected') === 'true')));
+  });
+
+  // ---------- Wohnungswahl: Licht an + Grundriss ----------
+  document.querySelectorAll('.ww-wahl').forEach((root) => {
+    const knoepfe = [...root.querySelectorAll('.ww-we')];
+    const panel = (i) => document.getElementById(knoepfe.find((k) => Number(k.dataset.i) === i).getAttribute('aria-controls'));
+    const start = root.querySelector('.ww-start');
+    let aktiv = null;
+    const zeige = (i) => {
+      if (i === aktiv) return;
+      const altEl = aktiv === null ? start : panel(aktiv);
+      aktiv = i;
+      knoepfe.forEach((k) => k.setAttribute('aria-pressed', Number(k.dataset.i) === i));
+      root.querySelectorAll('.ww-licht').forEach((l) => l.classList.toggle('an', Number(l.dataset.i) === i));
+      root.querySelectorAll('.ww-zone').forEach((z) => z.classList.toggle('an', Number(z.dataset.i) === i));
+      const wrap = root.parentElement.querySelector('.ww-flaechen-wrap');
+      if (wrap) wrap.querySelectorAll('.ww-flaechen').forEach((f) => { f.hidden = Number(f.dataset.i) !== i; });
+      const neu = panel(i);
+      neu.classList.remove('weg'); neu.hidden = false;
+      if (altEl && altEl !== neu) {
+        altEl.classList.add('weg');
+        setTimeout(() => { if (altEl !== (aktiv === null ? start : panel(aktiv))) { altEl.hidden = true; altEl.classList.remove('weg'); } }, reduziert.matches ? 0 : 1100);
+      }
+    };
+    root.querySelectorAll('.gr-panel').forEach((p) => {
+      const gk = [...p.querySelectorAll('.ww-g-knopf')];
+      gk.forEach((k) => k.addEventListener('click', () => {
+        gk.forEach((x) => x.setAttribute('aria-pressed', x === k));
+        p.querySelectorAll('.ww-g-plan').forEach((pl) => { pl.hidden = pl.dataset.k !== k.dataset.k; });
+      }));
+    });
+    knoepfe.forEach((k) => k.addEventListener('click', () => zeige(Number(k.dataset.i))));
+    root.querySelectorAll('.ww-zone').forEach((z) => z.addEventListener('click', () => zeige(Number(z.dataset.i))));
+  });
+
+  // ---------- Galerie-Karussell (Außen / Innen) ----------
+  document.querySelectorAll('.gk-block').forEach((root) => {
+    const tabs = [...root.querySelectorAll('.gk-tab')];
+    const panels = [...root.querySelectorAll('.gk-panel')];
+    const zaehler = root.querySelector('.gk-zaehler');
+    const balken = root.querySelector('.gk-fortschritt span');
+    let aktiv = 0; let auto = null; let angefasst = false; let sichtbar = false;
+    const spur = () => panels[aktiv].querySelector('.gk-spur');
+    const bilder = () => [...spur().querySelectorAll('.gk-bild')];
+    const links = (s) => s.getBoundingClientRect().left + (parseFloat(getComputedStyle(s).paddingLeft) || 0);
+    const aktuell = () => { const s = spur(); const l0 = links(s); let n = 0; let best = Infinity; bilder().forEach((x, k) => { const d = Math.abs(x.getBoundingClientRect().left - l0); if (d < best) { best = d; n = k; } }); return n; };
+    const update = () => {
+      const s = spur(); const b = bilder(); const n = aktuell();
+      const max = s.scrollWidth - s.clientWidth;
+      const ende = max <= 4 || s.scrollLeft >= max - 4;
+      zaehler.textContent = `${String((ende ? b.length - 1 : n) + 1).padStart(2, '0')} / ${String(b.length).padStart(2, '0')}`;
+      balken.style.width = `${max > 0 ? Math.max(8, (s.scrollLeft / max) * 100) : 100}%`;
+    };
+    const zu = (ziel) => {
+      const s = spur(); const b = bilder();
+      ziel = (ziel + b.length) % b.length;
+      const delta = b[ziel].getBoundingClientRect().left - links(s);
+      s.scrollTo({ left: Math.max(0, Math.min(s.scrollWidth - s.clientWidth, s.scrollLeft + delta)), behavior: reduziert.matches ? 'auto' : 'smooth' });
+    };
+    const geh = (richtung) => {
+      const s = spur(); const b = bilder(); const max = s.scrollWidth - s.clientWidth;
+      let ziel = aktuell() + richtung;
+      if (richtung > 0 && (s.scrollLeft >= max - 4 || ziel >= b.length)) ziel = 0;
+      if (ziel < 0) ziel = b.length - 1;
+      zu(ziel);
+    };
+    const stopp = () => { angefasst = true; clearInterval(auto); auto = null; };
+    const starte = () => { if (angefasst || reduziert.matches || auto) return; auto = setInterval(() => { if (sichtbar && !document.hidden) geh(1); }, 4500); };
+    root.querySelector('.gk-weiter').addEventListener('click', () => { stopp(); geh(1); });
+    root.querySelector('.gk-zurueck').addEventListener('click', () => { stopp(); geh(-1); });
+    panels.forEach((p) => {
+      const s = p.querySelector('.gk-spur');
+      s.addEventListener('scroll', () => requestAnimationFrame(update), { passive: true });
+      ['pointerdown', 'wheel', 'touchstart', 'keydown'].forEach((t) => s.addEventListener(t, stopp, { passive: true }));
+      s.addEventListener('mouseenter', () => clearInterval(auto) || (auto = null));
+      s.addEventListener('mouseleave', starte);
+      // Tippen an den Bildrand blättert, Mitte öffnet die Großansicht
+      s.addEventListener('mousemove', (e) => {
+        const btn = e.target.closest('.rd-photo'); if (!btn) return;
+        const r = btn.getBoundingClientRect(); const x = (e.clientX - r.left) / r.width;
+        btn.dataset.seite = x < 0.28 ? 'l' : x > 0.72 ? 'r' : '';
+      });
+      s.addEventListener('click', (e) => {
+        const btn = e.target.closest('.rd-photo'); if (!btn || e.detail === 0) return;
+        const fig = btn.closest('.gk-bild'); const b = bilder(); const k = b.indexOf(fig); const n = aktuell();
+        const r = btn.getBoundingClientRect(); const x = (e.clientX - r.left) / r.width;
+        let ziel = null;
+        if (k !== n) ziel = k;
+        else if (x < 0.28) ziel = n - 1;
+        else if (x > 0.72) ziel = n + 1;
+        if (ziel === null) return;
+        e.preventDefault(); e.stopPropagation(); stopp();
+        if (ziel === n + 1) geh(1); else if (ziel === n - 1) geh(-1); else zu(ziel);
+      }, true);
+    });
+    const waehle = (i, fokus) => {
+      aktiv = i;
+      tabs.forEach((t, k) => { t.setAttribute('aria-selected', k === i); t.tabIndex = k === i ? 0 : -1; });
+      panels.forEach((p, k) => { p.hidden = k !== i; });
+      spur().scrollLeft = 0; update();
+      if (fokus) tabs[i].focus();
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => { stopp(); waehle(i); });
+      t.addEventListener('keydown', (e) => { const n = { ArrowRight: i + 1, ArrowLeft: i - 1 }[e.key]; if (n === undefined) return; e.preventDefault(); waehle((n + tabs.length) % tabs.length, true); });
+    });
+    if ('IntersectionObserver' in window) new IntersectionObserver((e) => { sichtbar = e[0].isIntersecting; if (sichtbar) starte(); }, { threshold: 0.4 }).observe(root.querySelector('.gk-buehne'));
+    update();
   });
 })();
